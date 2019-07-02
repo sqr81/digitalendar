@@ -27,7 +27,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $event1->setPicture(null);
         $event1->setTitle("Web2Day");
         $event1->setSlug($this->slugger->slugify($event1->getTitle()));
-        $event1->setPicture("");
+        $event1->setPicture("web2day.jpg");
         $event1->setDescription("");
         $event1->setDateStart(new\DateTime("2019-06-05"));
         $event1->setDateEnd(new\DateTime("2019-06-07"));
