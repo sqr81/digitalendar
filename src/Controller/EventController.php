@@ -6,7 +6,9 @@ use App\Entity\Event;
 use App\Form\EventType;
 use App\Repository\EventRepository;
 use App\Service\Slugger;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -28,6 +30,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/new", name="event_new", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function new(Request $request, Slugger $slugger): Response
     {
@@ -36,6 +39,18 @@ class EventController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            /** @var UploadedFile $pictureFile */
+            $pictureFile = $form["pictureFile"]->getData();
+
+            if ($pictureFile) {
+                $filename = uniqid() . "." . $pictureFile->guessExtension();
+                $pictureFile->move($this->getParameter("upload_dir"), $filename);
+                $event->setPicture($filename);
+            }
+
+            $event->setSlug($slugger->slugify($event->getTitle()));
+            $event->setUser($this->getUser());
+            $event->setIsValid(false);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($event);
             $entityManager->flush();
@@ -51,6 +66,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/{id}", name="event_show", methods={"GET"})
+     * @IsGranted("ROLE_USER")
      */
     public function show(Event $event): Response
     {
@@ -61,6 +77,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/{id}/edit", name="event_edit", methods={"GET","POST"})
+     * @IsGranted("ROLE_USER")
      */
     public function edit(Request $request, Event $event): Response
     {
@@ -83,6 +100,7 @@ class EventController extends AbstractController
 
     /**
      * @Route("/{id}", name="event_delete", methods={"DELETE"})
+     * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, Event $event): Response
     {

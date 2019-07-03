@@ -28,7 +28,7 @@ class   UserFixtures extends Fixture
         // $product = new Product();
         // $manager->persist($product);
         $user1 = new User();
-        $user1->setUsername("Tolia");
+        $user1->setUsername("Krusty");
         $user1->setRoles(["ROLE_ADMIN"]);
         $user1->setPassword($this->encoder->encodePassword($user1, "1234"));
         $user1->setEmail("tolia@free.fr");
@@ -36,7 +36,7 @@ class   UserFixtures extends Fixture
         $manager->persist($user1);
 
         $user2 = new User();
-        $user2->setUsername("Bertrand");
+        $user2->setUsername("Tahiti Bob");
         $user2->setRoles(["ROLE_USER"]);
         $user2->setPassword($this->encoder->encodePassword($user2, "azer"));
         $user2->setEmail("bertrand@free.fr");
@@ -44,7 +44,7 @@ class   UserFixtures extends Fixture
         $manager->persist($user2);
 
         $user3 = new User();
-        $user3->setUsername("Jerome");
+        $user3->setUsername("Apu");
         $user3->setRoles(["ROLE_USER"]);
         $user3->setPassword($this->encoder->encodePassword($user3, "tyui"));
         $user3->setEmail("jerome@free.fr");
