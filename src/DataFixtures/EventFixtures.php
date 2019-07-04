@@ -41,7 +41,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         $event2 = new Event();
         $event2->setTitle("Les rencontres numériques du Pays Basque");
-        $event2->setSlug($this->slugger->slugify($event1->getTitle()));
+        $event2->setSlug($this->slugger->slugify($event2->getTitle()));
         $event2->setPicture("rnpb.jpg");
         $event2->setDescription("Lorem ipsum...");
         $event2->setDateStart(new\DateTime("2019-07-01"));
@@ -57,7 +57,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
 
         $event3 = new Event();
         $event3->setTitle("BtoB Summit");
-        $event3->setSlug($this->slugger->slugify($event1->getTitle()));
+        $event3->setSlug($this->slugger->slugify($event3->getTitle()));
         $event3->setPicture("btob.jpg");
         $event3->setDescription("Lorem ipsum...");
         $event3->setDateStart(new\DateTime("2019-07-01"));
@@ -68,7 +68,7 @@ class EventFixtures extends Fixture implements DependentFixtureInterface
         $event3->setCity($this->getReference("paris"));
         $event3->setUser($this->getReference("user3"));
         $event3->addLanguage($this->getReference("deutsch"));
-        $this->setReference("BtoB Summit",$event2);
+        $this->setReference("BtoB Summit",$event3);
         $manager->persist($event3);
 
         $manager->flush();

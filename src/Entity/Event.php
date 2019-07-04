@@ -64,7 +64,7 @@ class Event
     private $is_valid;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\City")
+     * @ORM\ManyToOne(targetEntity="App\Entity\City", inversedBy="events")
      * @ORM\JoinColumn(nullable=false)
      */
     private $city;
