@@ -65,30 +65,34 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="event_show", methods={"GET"})
+     * @Route("/{slug}", name="event_show", methods={"GET"})
      * @IsGranted("ROLE_USER")
      */
     public function show(Event $event): Response
     {
         return $this->render('event/show.html.twig', [
             'event' => $event,
+            "slug" => $event->getSlug(),
         ]);
     }
 
     /**
-     * @Route("/{id}/edit", name="event_edit", methods={"GET","POST"})
+     * @Route("/{slug}/edit", name="event_edit", methods={"GET","POST"})
      * @IsGranted("ROLE_USER")
      */
-    public function edit(Request $request, Event $event): Response
+    public function edit(Request $request, Slugger $slugger, Event $event): Response
     {
         $form = $this->createForm(EventType::class, $event);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
+            $event->setSlug($slugger->slugify($event->getTitle()));
             $this->getDoctrine()->getManager()->flush();
 
             return $this->redirectToRoute('event_index', [
                 'id' => $event->getId(),
+                "slug" => $event->getSlug(),
             ]);
         }
 
@@ -99,7 +103,7 @@ class EventController extends AbstractController
     }
 
     /**
-     * @Route("/{id}", name="event_delete", methods={"DELETE"})
+     * @Route("/{slug}", name="event_delete", methods={"DELETE"})
      * @IsGranted("ROLE_USER")
      */
     public function delete(Request $request, Event $event): Response
@@ -110,6 +114,9 @@ class EventController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('event_index');
+        return $this->redirectToRoute('event_index', [
+            'id' => $event->getId(),
+            "slug" => $event->getSlug(),
+        ]);
     }
 }
